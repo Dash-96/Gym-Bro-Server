@@ -1,0 +1,50 @@
+@host = http://localhost:3000
+
+### Create a workout
+POST {{host}}/workout/create
+Content-Type: application/json
+
+{
+  "workoutType": "push",
+  "workoutAlias": "Chest & Triceps",
+  "notes": "Felt strong, bumped bench up 2.5kg",
+  "startedAt": "2026-07-26T17:30:00.000Z",
+  "finishedAt": "2026-07-26T18:45:00.000Z",
+  "exercises": [
+    {
+      "exerciseKey": "barbell_bench_press",
+      "exerciseName": "Barbell Bench Press",
+      "orderIndex": 0,
+      "sets": [
+        { "setNumber": 1, "reps": 10, "weight": 60 },
+        { "setNumber": 2, "reps": 8, "weight": 70 },
+        { "setNumber": 3, "reps": 6, "weight": 80 }
+      ]
+    },
+    {
+      "exerciseKey": "incline_dumbbell_press",
+      "exerciseName": "Incline Dumbbell Press",
+      "orderIndex": 1,
+      "sets": [
+        { "setNumber": 1, "reps": 12, "weight": 22.5 },
+        { "setNumber": 2, "reps": 10, "weight": 25 }
+      ]
+    }
+  ]
+}
+
+### Minimal workout (only what the service actually reads)
+POST {{host}}/workout/create
+Content-Type: application/json
+
+{
+  "workoutType": "legs",
+  "workoutAlias": null,
+  "notes": null,
+  "startedAt": null,
+  "finishedAt": null,
+  "exercises": []
+}
+
+### List workouts (with exercises + sets)
+GET {{host}}/workout/workouts
