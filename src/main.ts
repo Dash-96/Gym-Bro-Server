@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { abortOnError: false });
+  app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
     .setTitle('GymBro API')
@@ -15,7 +16,10 @@ async function bootstrap() {
 
   SwaggerModule.setup('api/docs', app, document);
 
-  app.setGlobalPrefix("api")
-  await app.listen(Number(process.env.PORT ?? 3000) , '0.0.0.0');
+  const port = Number(process.env.PORT ?? 3000);
+  await app.listen(port , '0.0.0.0');
+
+  console.log(`Server listening on port ${port}`);
 }
 bootstrap();
+  
