@@ -1,15 +1,15 @@
 import { UseGuards } from "@nestjs/common";
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
-import { Server, Socket } from "socket.io";
+import { Namespace, Server, Socket } from "socket.io";
 import { WsAuthGuard } from "src/auth/auth.wsGuard";
 import { Public } from "src/decorators/public.decorator";
 
 // @Public()
 @UseGuards(WsAuthGuard)
-@WebSocketGateway(3001 , {namespace:"social"})
+@WebSocketGateway({namespace:"social-socket"})
 export class SocialGateway{
     @WebSocketServer()
-    server : Server
+    server : Namespace
     
     @SubscribeMessage("socket-test")
     hanleTestMessage(@ConnectedSocket() client: Socket , @MessageBody() message:string){
