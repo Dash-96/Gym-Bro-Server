@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Param, Req } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import type { AuthenticatedRequest } from 'src/auth/auth.guard';
 import { CompetitionDataDto } from './dtos/competitonData.dto';
