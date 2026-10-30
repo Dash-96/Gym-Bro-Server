@@ -33,9 +33,17 @@ export class User{
     @Column()
     weight: number;
 
+    @Column({type:"jsonb" , nullable:true , default: () => "'{}'" , name:"user_meta"})
+    userMeta: UserMeta
+
+
 
 
 
     @OneToMany(type => Workout , workout => workout.user , {cascade:["remove"]})
     workouts: Workout[]
+}
+
+interface UserMeta{
+    expoToken:string;
 }

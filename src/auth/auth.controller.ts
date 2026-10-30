@@ -31,6 +31,7 @@ export class AuthController {
     { accessToken: string; refreshToken: string } | { message: string }
   > {
     try {
+      console.log("user tryin login...")
       const response = await this.authService.signIn(signInDto);
       let message = '';
       if (response) {
@@ -54,6 +55,7 @@ export class AuthController {
   async register(
     @Body() registerDetails: CreateUserDto,
   ){
+    console.log("called register")
     return await this.authService.signUp(registerDetails);
   }
 

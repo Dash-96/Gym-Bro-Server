@@ -21,6 +21,8 @@ import { AuthGuard } from './auth/auth.guard';
 
 import { SocialModule } from './social/social.module';
 import { SocailEventsModule } from './websocket/social/socialEvents.module';
+import { UserPushNotification } from './pushNotifications/entities/UserPushNotification';
+import { PushNotificationsModule } from './pushNotifications/pushNotifications.module';
 
 @Module({
   controllers: [AppController, ExerciseController],
@@ -44,7 +46,7 @@ import { SocailEventsModule } from './websocket/social/socialEvents.module';
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
         url: config.getOrThrow<string>('DATABASE_URL'),
-        entities: [Workout, User],
+        entities: [Workout, User , UserPushNotification],
         synchronize: false,
         autoLoadEntities: true,
       }),
@@ -57,6 +59,7 @@ import { SocailEventsModule } from './websocket/social/socialEvents.module';
     AuthModule,
     SocialModule,
     SocailEventsModule,
+    PushNotificationsModule
   ],
 })
 export class AppModule {}
