@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Inject, Param, Post, Req } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Inject, Param, Post, Query, Req } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import type { AuthenticatedRequest } from 'src/auth/auth.guard';
 import { CompetitionDataDto } from './dtos/competitonData.dto';
 import { SocialService } from './social.service';
+import { Friend } from './entities/Friend';
 
 @ApiBearerAuth()
 @Controller('social')
@@ -32,9 +33,29 @@ export class SocialController {
        return result;
     }
 
-    @Get("getAllUsers/:prefix")
-    async getAllUsersWithPrefix(@Param('prefix') prefix:string){
+    @Get("search")
+    async getAllUsersWithPrefix(@Query('prefix') prefix:string){
         const result = await this.socialService.getAllUsers(prefix);
+        console.log("user list: " , result)
         return result;
+    }
+
+    @Get("friend-requests")
+    async getFriendRequestsByUserId(@Req() req: AuthenticatedRequest){
+        const data = await this.socialService.getFriendRequestsForUser(req.user.sub);
+        return data;
+      
+    }
+
+    //social/accept-friend-request?friendId=
+    @Post("accept-friend-request")
+    async acceptFriendRequest(@Req() req: AuthenticatedRequest , @Body() dto: {friendId: number}){
+            const response = await this.socialService.acceptFriendRequest(req.user.sub , dto.friendId)
+            if(response){
+                return {status: "success"}
+            }
+            else{
+                throw new BadRequestException("Could not accept request");
+            }
     }
 }

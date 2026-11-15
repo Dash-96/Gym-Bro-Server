@@ -60,8 +60,9 @@ export class AuthController {
   }
 
   @ApiBearerAuth()
-  @Post('refresh')
+  @Get('refresh')
   async refreshAccess(@Req() req: AuthenticatedRequest) {
+    console.log("called refresh token")
     const user = req.user;
     const acceesToekn = await this.authService.refreshAccess(user);
     return acceesToekn;

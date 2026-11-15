@@ -5,7 +5,7 @@ import { User } from 'src/user/entities/User';
 import { Repository } from 'typeorm';
 import { SignInDto } from './dto/signIn.dto';
 import {  CreateUserDto } from 'src/user/dto/createUser.dto';
-import { jwtPayload } from './dto/jwtPayload';
+import { JwtPayload } from './dto/jwtPayload';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class AuthService {
 
   async signIn(signInDto: SignInDto) {
     const user = await this.userRepository.findOne({
-      where: { displayName: signInDto.displayName },
+      where: { userName: signInDto.userName },
     });
     if (!user) {
       throw new UnauthorizedException('Incorect username or password');
@@ -30,21 +30,9 @@ export class AuthService {
     if (!isPasswordCorrect) {
       throw new UnauthorizedException('Incorect username or password');
     }
-    const accessTokenInterval = Date.now() / 1000 + 60 * 60; /// 1 hour
-    const refreshTokenInterval = Date.now() / 1000 + 60 * 60 * 24 * 30; /// 1 month
-    const accessPayload: jwtPayload = {
-      sub: user.id,
-      username: user.displayName,
-      exp: accessTokenInterval,
-    };
-    const refreshPayload: jwtPayload = {
-      sub: user.id,
-      username: user.displayName,
-      exp: refreshTokenInterval,
-    };
     return {
-      accessToken: await this.jwtService.signAsync(accessPayload),
-      refreshToken: await this.jwtService.signAsync(refreshPayload),
+      accessToken: await this.genreateJwtToken(user.id , user.userName , "access"),
+      refreshToken: await this.genreateJwtToken(user.id , user.userName , "refresh"),
     };
   }
 
@@ -53,22 +41,34 @@ export class AuthService {
     const createdUser = this.userRepository.create({
       ...signUpDetails , password: hashedPassword
     });
+    
     const savedUser = await this.userRepository.save(createdUser);
-    return savedUser;
+     return {
+      accessToken: await this.genreateJwtToken(savedUser.id , savedUser.userName , "access"),
+      refreshToken: await this.genreateJwtToken(savedUser.id , savedUser.userName , "refresh"),
+    };
   }
 
   //= Genreates a new access token if the refresh token is still valid
-  async refreshAccess(user: jwtPayload) {
-    this.checkTokenExp(user.exp)
-    const accessTokenInterval = Date.now() / 1000 + 60 * 60;
-    return await this.jwtService.signAsync({ ...user, exp: accessTokenInterval });
+  async refreshAccess(user: JwtPayload) {
+    try{
+      console.log(user.exp)
+      this.checkTokenExp(user.exp)
+      const accessTokenInterval = Date.now() / 1000 + 60 * 60;
+      return await this.jwtService.signAsync({ ...user, exp: accessTokenInterval });
+    }catch(err){
+      console.error(err);
+      throw err;
+    }
   }
 
-  async quicksignIn(user: jwtPayload) {
+  async quicksignIn(user: JwtPayload) {
     this.checkTokenExp(user.exp);
     return "authorized"
   }
 
+
+  //.Auth util functions 
   private async hashPassword(password: string) {
     return hash(password, { type: argon2id });
   }
@@ -83,4 +83,19 @@ export class AuthService {
       throw new UnauthorizedException();
     }
   }
+
+  private async genreateJwtToken(userId: number , userName: string , type: "access" | "refresh"){
+    const interval = Date.now() / 1000 + 60 * 60;
+    const tokenInterval = type === "access" ? interval : interval * 24 * 30;
+      
+
+     const jwtPayload: JwtPayload = {
+      sub: userId,
+      username: userName,
+      exp: tokenInterval,
+    };
+
+   return await this.jwtService.signAsync(jwtPayload)
+  }
 }
+

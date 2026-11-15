@@ -10,11 +10,11 @@ import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
 import { Socket } from 'socket.io';
 import { IS_PUBLIC_KEY } from 'src/decorators/public.decorator';
-import { jwtPayload } from './dto/jwtPayload';
+import { JwtPayload } from './dto/jwtPayload';
 import { WsException } from '@nestjs/websockets';
 
 export interface WSAuthenticatedRequest extends Socket {
-  user: jwtPayload;
+  user: JwtPayload;
 }
 
 @Injectable()
@@ -40,7 +40,7 @@ export class WsAuthGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync<jwtPayload>(token);
+      const payload = await this.jwtService.verifyAsync<JwtPayload>(token);
       (request as WSAuthenticatedRequest).user = payload;
     } catch {
       throw new WsException("Unathorized WS connection...");

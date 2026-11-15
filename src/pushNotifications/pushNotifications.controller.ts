@@ -1,4 +1,4 @@
-import { Body, Controller, Injectable, Post , Req } from "@nestjs/common";
+import { Body, Controller, Post , Req } from "@nestjs/common";
 import { CreatePushNotification } from "./dtos/createPushNotification.dto";
 import { Public } from "src/decorators/public.decorator";
 import { PushNotificationsService } from "./pushNotification.service";
@@ -19,7 +19,7 @@ export class PushNotificationsController{
     @Post("friend-request-notification")
     async createPushNotification( @Req() req: AuthenticatedRequest, @Body() dto :CreatePushNotification){
         try{
-            const response = await this.notificationService.createPushNotification(dto);
+            const response = await this.notificationService.createPushNotification( req.user.sub, dto);
             return {status:"success" , response}
         }catch(err){
             console.error(err);

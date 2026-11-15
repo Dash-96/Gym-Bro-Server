@@ -7,7 +7,7 @@ export class UserPushNotification {
   @PrimaryGeneratedColumn()
   id: number;
   @Column({ name: 'sender_id' })
-  sendeId: number;
+  senderId: number;
   @Column({ name: 'reciver_id' })
   reciverId: number;
   @Column({ name: 'is_approved' })

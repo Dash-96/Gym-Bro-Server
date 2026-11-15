@@ -12,7 +12,7 @@ export class UserService{
         try{
             const user = await this.userRepositiry.findOne({where:{id: userId}})
             if(user){
-                return { userId:user.id, userName: user.displayName , fullName: user.fullName , age: 30 , email:user.email , height: 178 , weight: user.weight , profileImage: user.profileImage ?? undefined};
+                return { userId:user.id, userName: user.userName , fullName: user.fullName , age: 30 , email:user.email , height: 178 , weight: user.weight , profileImage: user.profileImage ?? undefined};
             }
             else{
                 throw new NotFoundException("User Not Found")
