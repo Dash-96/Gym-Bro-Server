@@ -1,4 +1,4 @@
 export class SignInDto{
-    displayName: string;
+    userName: string;
     password:string;
 }

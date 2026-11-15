@@ -9,10 +9,10 @@ import { Reflector } from '@nestjs/core/services/reflector.service';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from 'src/decorators/public.decorator';
-import { jwtPayload } from './dto/jwtPayload';
+import { JwtPayload } from './dto/jwtPayload';
 
 export interface AuthenticatedRequest extends Request{
-    user: jwtPayload
+    user: JwtPayload
 }
 
 @Injectable()
@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload = await this.jwtService.verifyAsync<jwtPayload>(token);
+      const payload = await this.jwtService.verifyAsync<JwtPayload>(token);
       (request as AuthenticatedRequest).user = payload;
     } catch {
       throw new UnauthorizedException();

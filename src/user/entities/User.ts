@@ -10,7 +10,7 @@ export class User{
     phone: string;
 
     @Column({name:"display_name"})
-    displayName: string;
+    userName: string;
 
      @Column({name:"full_name"})
     fullName: string;

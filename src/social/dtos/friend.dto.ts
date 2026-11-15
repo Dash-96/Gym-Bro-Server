@@ -1,4 +1,6 @@
 export class FriendDto{
     friendId: number;
-    userName:string
+    userName:string;
+    fullName:string;
+    profileImage: string;
 }

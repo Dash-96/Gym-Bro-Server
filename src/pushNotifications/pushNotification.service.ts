@@ -31,13 +31,13 @@ export class PushNotificationsService {
 
 
 
-  async createPushNotification(notification: CreatePushNotification) {
+  async createPushNotification( senderId: number, notification: CreatePushNotification) {
     try {
       const targetId = notification.reciverId;
       const targetUserMeta = await this.userRepository.findOne({where:{id: targetId} , select:{userMeta:true}})
       const pushToken = targetUserMeta?.userMeta.expoToken ?? "";
       this.expoService.sendNotification([pushToken] , "קיבלת בקשת חברות");
-      const result = await this.notificationRepository.insert(notification);
+      const result = await this.notificationRepository.insert({ ...notification , senderId: senderId});
       return result;
     } catch (err) {
       console.error(err);

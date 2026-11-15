@@ -1,11 +1,11 @@
 // export class CreateUserDto{
-//     displayName: string;
+//     userName: string;
 //     password:string;
 // }
 
 export type CreateUserDto = {
   fullName: string;
-  displayName: string;
+  userName: string;
   email: string;
   password: string;
   age: number;
@@ -15,4 +15,5 @@ export type CreateUserDto = {
   birthDate:string
   phone:string
   gender: "male" | "female"
+
 };
