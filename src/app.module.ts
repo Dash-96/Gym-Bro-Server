@@ -9,7 +9,6 @@ import { AppService } from './app.service';
 import { WorkoutModule } from './workout/workout.module';
 import { Workout } from './workout/entities/Workout';
 
-import { ExerciseController } from './exercise/exercise.controller';
 import { ExerciseModule } from './exercise/exercise.module';
 import { SetModule } from './set/set.module';
 
@@ -25,7 +24,7 @@ import { UserPushNotification } from './pushNotifications/entities/UserPushNotif
 import { PushNotificationsModule } from './pushNotifications/pushNotifications.module';
 
 @Module({
-  controllers: [AppController, ExerciseController],
+  controllers: [AppController],
 
   providers: [
     AppService,
