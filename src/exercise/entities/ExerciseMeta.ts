@@ -15,7 +15,7 @@ export class ExerciseMeta {
   exerciseNameHe: string;
 
   @Column({ name: 'target_muscle_group' })
-  tragetMuscleGroup: string;
+  targetMuscleGroup: string;
 
   @Column({name: "date"})
   date: Date;
